@@ -97,17 +97,17 @@ EOF
 
 ### 2. Initialize Frontend (TanStack Start)
 
-**Use the new TanStack CLI:**
+**Use the new TanStack CLI with pnpm:**
 
 ```bash
 # Interactive mode (recommended) - guides you through project setup
-npx @tanstack/cli create frontend
+pnpm dlx @tanstack/cli create frontend
 
 # Or non-interactive with defaults
-npx @tanstack/cli create frontend -y
+pnpm dlx @tanstack/cli create frontend -y
 
 # With add-ons (optional)
-npx @tanstack/cli create frontend --add-ons tanstack-query
+pnpm dlx @tanstack/cli create frontend --add-ons tanstack-query
 ```
 
 **Note:** The CLI will create a project in the `frontend/` directory. After creation:

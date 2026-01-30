@@ -125,10 +125,27 @@ pnpm dev
 
 ### 3. Initialize Backend (Strapi)
 
-**Always use pnpm:**
+**Use pnpm with the new Strapi CLI:**
+
 ```bash
-# Create Strapi project with TypeScript
-pnpm create strapi-app@latest backend --typescript
+# Create Strapi project (interactive mode)
+pnpm dlx create-strapi@latest backend
+
+# Or with options
+pnpm dlx create-strapi@latest backend --template <template-name>
+```
+
+**Note:** The CLI will create a project in the `backend/` directory. After creation:
+- Set up Strapi with TypeScript
+- Configure database (SQLite by default for development)
+- Set up admin panel
+- Configure API endpoints
+
+**Run the project:**
+```bash
+cd backend
+pnpm dev
+# Open http://localhost:1337/admin
 ```
 
 ### 4. Install Additional Dependencies

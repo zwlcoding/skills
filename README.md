@@ -18,14 +18,15 @@ Build SSR applications with TanStack Start and Strapi CMS. Use when creating con
 
 ## 🚀 Quick Start
 
-### Installation
+### One-Line Installation
 
 ```bash
-# Clone the repository
 git clone git@github.com:zwlcoding/skills.git ~/.config/opencode/skills/zwlcoding-skills
 ```
 
-OpenCode will automatically discover skills from `~/.config/opencode/skills/`.
+That's it! OpenCode will automatically discover and load all skills from this repository.
+
+### Installation
 
 ### Usage
 

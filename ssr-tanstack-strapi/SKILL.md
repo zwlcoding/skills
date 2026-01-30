@@ -62,10 +62,30 @@ my-app/
 
 ## Quick Start
 
+**Before starting, ask the user:**
+> "Do you want to install the project in the current directory? (yes/no)"
+
+- **If YES**: Create `frontend/` and `backend/` directly in the current directory
+- **If NO**: Create a new project directory first, then create `frontend/` and `backend/` inside it
+
 ### 1. Initialize Monorepo
 
+**If installing in current directory:**
 ```bash
-mkdir my-ssr-app && cd my-ssr-app
+# Create pnpm workspace in current directory
+cat > pnpm-workspace.yaml << 'EOF'
+packages:
+  - 'frontend'
+  - 'backend'
+EOF
+```
+
+**If creating new project directory:**
+```bash
+# Ask user for project name, default to 'my-ssr-app'
+read -p "Project name (default: my-ssr-app): " project_name
+project_name=${project_name:-my-ssr-app}
+mkdir "$project_name" && cd "$project_name"
 
 # Create pnpm workspace
 cat > pnpm-workspace.yaml << 'EOF'
@@ -77,12 +97,10 @@ EOF
 
 ### 2. Initialize Frontend (TanStack Start)
 
+**Always use pnpm:**
 ```bash
 # Create TanStack Start project
 pnpm create @tanstack/start@latest frontend
-
-# Or with npm
-npm create @tanstack/start@latest frontend
 ```
 
 This will:
@@ -93,12 +111,10 @@ This will:
 
 ### 3. Initialize Backend (Strapi)
 
+**Always use pnpm:**
 ```bash
 # Create Strapi project with TypeScript
-npx create-strapi-app@latest backend --typescript
-
-# Or with yarn
-yarn create strapi-app backend --typescript
+pnpm create strapi-app@latest backend --typescript
 ```
 
 ### 4. Install Additional Dependencies

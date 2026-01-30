@@ -1,4 +1,4 @@
-# Installing Waylon Skills for OpenCode
+# Installing Skills for OpenCode
 
 ## Prerequisites
 
@@ -10,32 +10,53 @@
 ### 1. Clone Skills Repository
 
 ```bash
-git clone git@github.com:zwlcoding/skills.git ~/.config/opencode/skills/zwlcoding-skills
+# Clone to a temporary location
+git clone git@github.com:zwlcoding/skills.git /tmp/zwlcoding-skills
 ```
 
-### 2. Configure OpenCode Skills Directory
+### 2. Install Skills
 
-OpenCode automatically discovers skills from these locations:
+OpenCode discovers skills from `~/.config/opencode/skills/<skill-name>/SKILL.md`. You need to copy or symlink each skill individually:
 
-- Project config: `.opencode/skills/<name>/SKILL.md`
-- Global config: `~/.config/opencode/skills/<name>/SKILL.md`
-- Project Claude-compatible: `.claude/skills/<name>/SKILL.md`
-- Global Claude-compatible: `~/.claude/skills/<name>/SKILL.md`
+**Option A: Copy skills (recommended)**
+```bash
+# Create skills directory if not exists
+mkdir -p ~/.config/opencode/skills
 
-For global usage, skills will be automatically discovered from `~/.config/opencode/skills/zwlcoding-skills/ssr-tanstack-strapi/SKILL.md`
+# Copy all skills from the repository
+cp -r /tmp/zwlcoding-skills/ssr-tanstack-strapi ~/.config/opencode/skills/
 
-### 3. Add Skills to Your Project (Optional)
+# Clean up temporary clone
+rm -rf /tmp/zwlcoding-skills
+```
 
-For project-specific usage, copy skills to your project:
+**Option B: Create symbolic links (for easy updates)**
+```bash
+# Create skills directory if not exists
+mkdir -p ~/.config/opencode/skills
+
+# Create symlinks for each skill
+ln -s /tmp/zwlcoding-skills/ssr-tanstack-strapi ~/.config/opencode/skills/ssr-tanstack-strapi
+
+# Keep the repository for future updates
+# Repository remains at /tmp/zwlcoding-skills or move to permanent location
+```
+
+### 3. Verify Installation
+
+Check that skills are in the correct location:
 
 ```bash
-mkdir -p .opencode/skills
-cp -r ~/.config/opencode/skills/zwlcoding-skills/* .opencode/skills/
+ls -la ~/.config/opencode/skills/
+# Should show: ssr-tanstack-strapi/
+
+ls -la ~/.config/opencode/skills/ssr-tanstack-strapi/
+# Should show: SKILL.md
 ```
 
 ### 4. Restart OpenCode
 
-Restart OpenCode to ensure all skills are loaded.
+Restart OpenCode to load the newly installed skills.
 
 ## Usage
 
@@ -52,94 +73,88 @@ Use OpenCode's native `skill` tool:
 use skill tool to load ssr-tanstack-strapi
 ```
 
-Or simply ask OpenCode to use the skill by name.
+Or simply ask OpenCode:
+```
+Use the ssr-tanstack-strapi skill to help me with my project
+```
 
 Check available skills with:
 ```bash
 skill tool to list skills
 ```
 
-### Adding New Skills
+## Adding Skills to Your Project
 
-To add more skills in the future:
-
-#### Method 1: Add to Repository
-```bash
-cd ~/.config/opencode/skills/zwlcoding-skills
-git pull origin main  # Get latest skills
-```
-
-#### Method 2: Add Personally
-Create new skills in your project:
+For project-specific usage, copy skills to your project:
 
 ```bash
-mkdir -p .opencode/skills/new-skill
+mkdir -p .opencode/skills
+cp -r ~/.config/opencode/skills/ssr-tanstack-strapi .opencode/skills/
 ```
 
-Create `.opencode/skills/new-skill/SKILL.md`:
+## Updating Skills
 
-```markdown
----
-name: new-skill
-description: Use when [condition] - [what it does]
----
-
-# New Skill
-
-[Your skill content here]
-```
-
-#### Method 3: Add Globally
-Add to your personal skills directory:
-
+### If you used Option A (copy):
 ```bash
-mkdir -p ~/.config/opencode/skills/new-skill
+# Re-clone and re-copy
+git clone git@github.com:zwlcoding/skills.git /tmp/zwlcoding-skills
+rm -rf ~/.config/opencode/skills/ssr-tanstack-strapi
+cp -r /tmp/zwlcoding-skills/ssr-tanstack-strapi ~/.config/opencode/skills/
+rm -rf /tmp/zwlcoding-skills
+```
+
+### If you used Option B (symlink):
+```bash
+# Just pull updates
+cd /path/to/zwlcoding-skills
+git pull origin main
 ```
 
 ## Skills Priority Order
 
+OpenCode loads skills in this priority order:
 1. **Project skills** (`.opencode/skills/`) - Highest priority
 2. **Global skills** (`~/.config/opencode/skills/`) - Medium priority  
 3. **Claude-compatible skills** (`.claude/skills/`, `~/.claude/skills/`) - Fallback
-
-## Updating Skills
-
-```bash
-# Update all skills
-cd ~/.config/opencode/skills/zwlcoding-skills
-git pull origin main
-
-# Copy updated skills to project if needed
-cp -r ~/.config/opencode/skills/zwlcoding-skills/* .opencode/skills/
-```
 
 ## Troubleshooting
 
 ### Skills not found
 
-1. Check if skills are loaded: `ls -l ~/.config/opencode/skills/zwlcoding-skills`
-2. Verify skill files exist and have correct SKILL.md format
-3. Check that skill names match directory names (e.g., `ssr-tanstack-strapi` directory)
-4. Use `skill` tool to list available skills
-5. Check OpenCode logs for loading errors
+1. **Check skill location:**
+   ```bash
+   ls ~/.config/opencode/skills/
+   ```
+   Each skill should be a direct subdirectory, not nested.
 
-### Specific skill not working
+2. **Verify SKILL.md exists:**
+   ```bash
+   ls ~/.config/opencode/skills/ssr-tanstack-strapi/SKILL.md
+   ```
 
-1. Verify the skill directory contains a `SKILL.md` file
-2. Check the skill metadata (name and description) is properly formatted
-3. Ensure skill content follows OpenCode skill standards
+3. **Check skill format:**
+   - `SKILL.md` must be in ALL CAPS
+   - Must have frontmatter with `name` and `description`
+   - Directory name must match skill name in frontmatter
 
-### Tool Mapping
+4. **Restart OpenCode** after installing skills
 
-When skills reference tools not available in OpenCode:
-- `TodoWrite` → Use task planning tools or create todo lists manually
-- `Task` with subagents → Use `@mention` syntax for parallel work
-- Other tools → Use OpenCode's native tool equivalents
+### Common Mistakes
+
+❌ **Wrong:** Nested directory structure
+```
+~/.config/opencode/skills/zwlcoding-skills/ssr-tanstack-strapi/SKILL.md
+```
+
+✅ **Correct:** Flat directory structure
+```
+~/.config/opencode/skills/ssr-tanstack-strapi/SKILL.md
+```
 
 ## Contributing
 
 1. Fork the repository
-2. Create a new skill in appropriate directory
+2. Create a new skill directory with `SKILL.md`
 3. Follow the skill format in existing skills
 4. Submit a pull request
 

@@ -97,17 +97,31 @@ EOF
 
 ### 2. Initialize Frontend (TanStack Start)
 
-**Always use pnpm:**
+**Use the new TanStack CLI:**
+
 ```bash
-# Create TanStack Start project
-pnpm create @tanstack/start@latest frontend
+# Interactive mode (recommended) - guides you through project setup
+npx @tanstack/cli create frontend
+
+# Or non-interactive with defaults
+npx @tanstack/cli create frontend -y
+
+# With add-ons (optional)
+npx @tanstack/cli create frontend --add-ons tanstack-query
 ```
 
-This will:
+**Note:** The CLI will create a project in the `frontend/` directory. After creation:
 - Set up React + TypeScript
 - Configure Vite + TanStack Router
 - Set up file-based routing
 - Configure development server
+
+**Run the project:**
+```bash
+cd frontend
+pnpm dev
+# Open http://localhost:3000
+```
 
 ### 3. Initialize Backend (Strapi)
 
